@@ -1,5 +1,7 @@
 import os
+import tempfile
 from collections.abc import Generator
+from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
@@ -7,33 +9,40 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
 
-# Ensure tests never use the development database file.
-os.environ.setdefault("TEST_DATABASE_URL", "sqlite:///./test_dealership.db")
+_test_db_path = Path(tempfile.gettempdir()) / "dealership_pytest.db"
+_test_database_url = f"sqlite:///{_test_db_path.as_posix()}"
+
+os.environ.setdefault("TEST_DATABASE_URL", _test_database_url)
+os.environ.setdefault("DATABASE_URL", _test_database_url)
 os.environ.setdefault("JWT_SECRET", "test-jwt-secret-for-pytest-only")
 os.environ.setdefault("JWT_ALGORITHM", "HS256")
 os.environ.setdefault("JWT_EXPIRE_MINUTES", "30")
 
 from app.database import Base, get_db
+import app.database as database_module
 from app.main import app
 
 
 @pytest.fixture()
 def db_engine():
-    database_url = os.environ["TEST_DATABASE_URL"]
     connect_args = {"check_same_thread": False}
     engine = create_engine(
-        database_url,
+        _test_database_url,
         connect_args=connect_args,
         poolclass=StaticPool,
     )
+    Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
     yield engine
     Base.metadata.drop_all(bind=engine)
     engine.dispose()
-    if database_url.startswith("sqlite:///./"):
-        path = database_url.replace("sqlite:///./", "")
-        if os.path.isfile(path):
-            os.remove(path)
+    if database_module.engine is not engine:
+        database_module.engine.dispose()
+    if _test_db_path.is_file():
+        try:
+            _test_db_path.unlink()
+        except OSError:
+            pass
 
 
 @pytest.fixture()
@@ -49,6 +58,11 @@ def db_session(db_engine) -> Generator[Session, None, None]:
 @pytest.fixture()
 def client(db_engine) -> Generator[TestClient, None, None]:
     TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=db_engine)
+    original_engine = database_module.engine
+    original_session_local = database_module.SessionLocal
+
+    database_module.engine = db_engine
+    database_module.SessionLocal = TestingSessionLocal
 
     def override_get_db() -> Generator[Session, None, None]:
         db = TestingSessionLocal()
@@ -61,3 +75,5 @@ def client(db_engine) -> Generator[TestClient, None, None]:
     with TestClient(app) as test_client:
         yield test_client
     app.dependency_overrides.clear()
+    database_module.engine = original_engine
+    database_module.SessionLocal = original_session_local
