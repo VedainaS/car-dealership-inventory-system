@@ -1,5 +1,4 @@
 import os
-import tempfile
 from collections.abc import Generator
 from pathlib import Path
 
@@ -9,11 +8,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
 
-_test_db_path = Path(tempfile.gettempdir()) / "dealership_pytest.db"
-_test_database_url = f"sqlite:///{_test_db_path.as_posix()}"
-
-os.environ.setdefault("TEST_DATABASE_URL", _test_database_url)
-os.environ.setdefault("DATABASE_URL", _test_database_url)
+# Import-time engine URL only; each test uses its own file via the db_engine fixture.
+os.environ.setdefault("DATABASE_URL", "sqlite://")
+os.environ.setdefault("TEST_DATABASE_URL", "sqlite://")
 os.environ.setdefault("JWT_SECRET", "test-jwt-secret-for-pytest-only")
 os.environ.setdefault("JWT_ALGORITHM", "HS256")
 os.environ.setdefault("JWT_EXPIRE_MINUTES", "30")
@@ -24,25 +21,21 @@ from app.main import app
 
 
 @pytest.fixture()
-def db_engine():
+def db_engine(tmp_path: Path):
+    db_file = tmp_path / "test.db"
+    database_url = f"sqlite:///{db_file.as_posix()}"
     connect_args = {"check_same_thread": False}
     engine = create_engine(
-        _test_database_url,
+        database_url,
         connect_args=connect_args,
         poolclass=StaticPool,
     )
-    Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
     yield engine
     Base.metadata.drop_all(bind=engine)
     engine.dispose()
     if database_module.engine is not engine:
         database_module.engine.dispose()
-    if _test_db_path.is_file():
-        try:
-            _test_db_path.unlink()
-        except OSError:
-            pass
 
 
 @pytest.fixture()

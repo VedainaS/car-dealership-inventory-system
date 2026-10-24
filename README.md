@@ -61,4 +61,4 @@ Environment variables (see `.env.example`):
 .venv\Scripts\python -m pytest -v
 ```
 
-Pytest uses `TEST_DATABASE_URL` and overrides the app database session so development data is not touched.
+Pytest gives each test its own temporary SQLite file (via pytest's `tmp_path`) and overrides the app database session so development data is not touched. Optional `TEST_DATABASE_URL` in `.env` is for manual tooling only, not the test suite.
