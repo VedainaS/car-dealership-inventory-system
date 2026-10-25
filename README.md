@@ -112,12 +112,12 @@ These are actual captures of the running SPA connected to a locally seeded API. 
 
 ## My AI Usage
 
-I used **Cursor** for the initial authentication implementation and tests, **Google Antigravity** for the first Phase 2 inventory implementation and its RED test commit, and **ChatGPT** to review and correct search behavior, implement the React frontend and API integration, add frontend tests, run an independent test suite, and capture the final UI. I inspected generated code and test output, and corrected discrepancies before documenting results.
+I used **Cursor** for the initial authentication implementation and tests, **Google Antigravity** for the Phase 2 inventory plan and RED tests, and **ChatGPT** to review and correct search behavior, implement the React frontend and API integration, add frontend tests, run an independent test suite, capture the final UI, and update documentation. I checked the code and test output before recording results.
 
-AI sped up scaffolding and helped cover more flows, but it also produced claims that required checking. Search was documented as exact while its original `ilike` query treated `%` as a wildcard; a new failing regression test exposed the issue. An earlier draft of the prompt log summarized responses instead of preserving them verbatim. I corrected the code and left clear placeholders for conversations I cannot recover. I am responsible for reviewing the final behavior, completing the raw record, and presenting only commits and test runs that actually exist.
+AI sped up scaffolding and helped cover more flows, but its output still needed checking. Search was documented as exact while its original `ilike` query treated `%` as a wildcard; a failing regression test exposed the issue and the implementation was corrected. An earlier draft of the prompt log summarized responses instead of preserving them verbatim. The available original messages were retained, and missing chat history is disclosed rather than reconstructed. I am responsible for the final behavior and for presenting only commits and test runs that actually exist.
 
-The root [PROMPTS.md](PROMPTS.md) contains the available prompt text and identifies missing raw AI exchanges. Paste those exchanges verbatim or add public chat links before submitting. Do not substitute generated summaries.
+The root [PROMPTS.md](PROMPTS.md) contains available verbatim messages and identifies missing raw exchanges. The original Cursor chat was deleted. This ChatGPT conversation was created in an Education workspace, whose shared links are restricted to workspace members, so the file does not claim that link is public or that its surviving excerpts form a complete transcript.
 
 ## Submission status
 
-The code, tests, build, screenshots, and documentation are included. The remaining submission actions are to complete `PROMPTS.md` with original chat logs/links, commit any uncommitted work under the assignment's AI co-authorship rule, and publish the Git repository to obtain a public URL. A live deployment is optional.
+The code, tests, screenshots, test report, and Git history are published at the [public GitHub repository](https://github.com/VedainaS/car-dealership-inventory-system). `PROMPTS.md` contains the available raw AI messages and discloses missing conversation history. A live deployment has not been created.
