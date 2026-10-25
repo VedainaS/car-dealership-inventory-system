@@ -2,10 +2,17 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.auth.service import DuplicateEmailError, InvalidCredentialsError, login_user, register_user
+from app.auth.dependencies import get_current_user
 from app.database import get_db
+from app.models import User
 from app.schemas import LoginRequest, RegisterRequest, TokenResponse, UserPublic
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
+
+
+@router.get("/me", response_model=UserPublic)
+def current_user(user: User = Depends(get_current_user)) -> User:
+    return user
 
 
 @router.post("/register", response_model=UserPublic, status_code=status.HTTP_201_CREATED)

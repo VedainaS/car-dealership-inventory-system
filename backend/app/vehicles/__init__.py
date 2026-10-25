@@ -1,0 +1,1 @@
+"""Vehicle inventory feature package."""

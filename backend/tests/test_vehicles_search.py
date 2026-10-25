@@ -45,10 +45,12 @@ def _auth(token: str) -> dict:
 def _promote_admin(db_session, email: str) -> None:
     from app.models import User, UserRole
 
-    user = db_session.query(User).filter(User.email == email).first()
-    assert user is not None
+    # The auth service normalises emails to lowercase before storing them.
+    user = db_session.query(User).filter(User.email == email.lower()).first()
+    assert user is not None, f"User {email!r} not found in DB (looked up as {email.lower()!r})"
     user.role = UserRole.ADMIN
     db_session.commit()
+
 
 
 def _seed_fleet(client, admin_tok: str) -> None:
@@ -97,6 +99,16 @@ def test_search_make_case_insensitive(client, db_session):
     results = _search(client, admin_tok, make="toyota")
     assert len(results) == 2
     assert all(v["make"] == "Toyota" for v in results)
+
+
+def test_search_make_treats_sql_wildcards_as_literal_text(client, db_session):
+    _register(client, "admin-srch-literal@example.com")
+    _promote_admin(db_session, "admin-srch-literal@example.com")
+    admin_tok = _login(client, "admin-srch-literal@example.com")
+    _seed_fleet(client, admin_tok)
+
+    assert _search(client, admin_tok, make="%") == []
+    assert _search(client, admin_tok, make="Toy_ta") == []
 
 
 def test_search_make_uppercase_also_matches(client, db_session):

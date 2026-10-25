@@ -10,7 +10,6 @@ from sqlalchemy.pool import NullPool, StaticPool
 
 # Import-time engine URL only; each test uses its own file via the db_engine fixture.
 os.environ.setdefault("DATABASE_URL", "sqlite://")
-os.environ.setdefault("TEST_DATABASE_URL", "sqlite://")
 os.environ.setdefault("JWT_SECRET", "test-jwt-secret-for-pytest-only")
 os.environ.setdefault("JWT_ALGORITHM", "HS256")
 os.environ.setdefault("JWT_EXPIRE_MINUTES", "30")
