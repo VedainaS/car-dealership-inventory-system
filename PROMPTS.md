@@ -1,6 +1,6 @@
 # PROMPTS.md — Available AI conversation text
 
-This file contains the exact prompt text drafted in ChatGPT and the Antigravity plan text pasted into the ChatGPT conversation. It is not a complete transcript. Missing chats are disclosed rather than reconstructed. Replace the final link marker with a public link to this ChatGPT conversation before submission, or paste its unedited transcript.
+This file contains available verbatim messages from the ChatGPT conversation, the exact prompt text drafted there, and the Antigravity plan text pasted into it. It is not a complete transcript. Missing chats and responses are disclosed rather than reconstructed. A ChatGPT Education workspace link is restricted to its workspace and is not a public chat link for this submission.
 
 ## Cursor (Phase 1)
 
@@ -165,4 +165,52 @@ No Antigravity response was received after Prompt 2 because the plan ended. The 
 
 ## ChatGPT review and implementation
 
-[ADD PUBLIC LINK TO THIS CHATGPT CONVERSATION OR PASTE THE COMPLETE UNEDITED CHAT LOG HERE]
+The following messages are copied verbatim from the available ChatGPT conversation context. They are surviving excerpts, not the complete raw conversation: earlier assistant replies and some exchanges are not available for a faithful export here. No replies have been reconstructed.
+
+### User messages — surviving verbatim excerpts
+
+~~~~text
+give me prompts and i will give it to cursor and u verify
+~~~~
+
+~~~~text
+ek kaam krte lets use antigravity i will open the folder and tm acc prompt do
+~~~~
+
+~~~~text
+vo antigravity nhi kr skta plan khatam tm hi kr do u have zip
+~~~~
+
+~~~~text
+dekho baaki phases tm hi kr do
+~~~~
+
+~~~~text
+downloaded and extracted
+~~~~
+
+~~~~text
+exe" -m pytest -q
+............................................................   [100%]
+========================= warnings summary ==========================
+..\..\q1-files\.venv\Lib\site-packages\fastapi\testclient.py:1        
+  C:\Users\Vedaina Srivastava\Downloads\q1-files\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa 
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+60 passed, 1 warning in 45.86s
+~~~~
+
+~~~~text
+update prompt.md bhej do
+~~~~
+
+~~~~text
+[https://github.com/VedainaS/car-dealership-inventory-system](https://github.com/VedainaS/car-dealership-inventory-system)
+~~~~
+
+~~~~text
+yhi chat h khud kr do
+~~~~
+
+The Cursor chat was deleted, and this ChatGPT conversation cannot be shared publicly from the Education workspace. The available excerpts do not satisfy a requirement for a complete raw chat log. A full unedited export, if recoverable from the account, should replace this partial section before submission.
